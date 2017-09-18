@@ -36,13 +36,13 @@ public class TextController {
         LOGGER.info("Counting 10 the most repetitive words in the text.");
         try {
             List<String> words = textService.getTopOfMostCommonWords(file);
-            return new ResponseEntity<>(words, HttpStatus.OK);
+            return new ResponseEntity<>(new Response(words, null, null), HttpStatus.OK);
         } catch (UnsupportedFileTypeException e) {
             LOGGER.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(null, null, e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new Response(null, null, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -60,13 +60,13 @@ public class TextController {
         LOGGER.info("Verify that the brackets are correctly positioned.");
         try {
             Boolean verifyBrackets = textService.verifyBrackets(file);
-            return new ResponseEntity<>(verifyBrackets ? "correct" : "incorrect", HttpStatus.OK);
+            return new ResponseEntity<>(new Response(null, verifyBrackets ? "correct" : "incorrect", null), HttpStatus.OK);
         } catch (UnsupportedFileTypeException e) {
             LOGGER.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(null, null, e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new Response(null, null, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

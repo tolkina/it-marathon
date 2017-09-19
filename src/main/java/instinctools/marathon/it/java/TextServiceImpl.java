@@ -7,6 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service("textService")
@@ -26,26 +30,34 @@ public class TextServiceImpl implements TextService {
         return null;
     }
 
+    private boolean isOpenBracket(Character character) {
+        return character.equals('(') || character.equals('{') || character.equals('[');
+    }
+
+    private boolean isCloseBracket(Character character) {
+        return character.equals(')') || character.equals('}') || character.equals(']');
+    }
+
     @Override
-    public Boolean verifyBrackets(MultipartFile file) throws UnsupportedFileTypeException, IOException {
+    public boolean verifyBrackets(MultipartFile file) throws UnsupportedFileTypeException, IOException {
         verifyFileExtension(file);
         String text = new String(file.getBytes());
-        List<Character> brackets = new ArrayList<>();
+        Stack<Character> brackets = new Stack<>();
+        Character character;
         for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '(' || text.charAt(i) == '{' || text.charAt(i) == '[' ||
-                    text.charAt(i) == ')' || text.charAt(i) == '}' || text.charAt(i) == ']') {
-                brackets.add(text.charAt(i));
+            character = text.charAt(i);
+            if (isOpenBracket(character)) {
+                brackets.push(character);
+            } else if (isCloseBracket(character)) {
+                if (brackets.empty()) {
+                    return false;
+                } else if ((character.equals(')') && brackets.peek().equals('(')) ||
+                        (character.equals('}') && brackets.peek().equals('{')) ||
+                        (character.equals(']') && brackets.peek().equals('['))) {
+                    brackets.pop();
+                }
             }
         }
-        for (int i = 0; i < brackets.size() - 1; i++) {
-            if ((brackets.get(i) == '(' && brackets.get(i + 1) == ')') ||
-                    (brackets.get(i) == '[' && brackets.get(i + 1) == ']') ||
-                    (brackets.get(i) == '{' && brackets.get(i + 1) == '}')) {
-                brackets.remove(i);
-                brackets.remove(i);
-                i = -1;
-            }
-        }
-        return brackets.isEmpty();
+        return brackets.empty();
     }
 }

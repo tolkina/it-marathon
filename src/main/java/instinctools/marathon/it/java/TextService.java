@@ -8,5 +8,5 @@ import java.util.List;
 public interface TextService {
     List<String> getTopOfMostCommonWords(MultipartFile file) throws UnsupportedFileTypeException, IOException;
 
-    Boolean verifyBrackets(MultipartFile file) throws UnsupportedFileTypeException, IOException;
+    boolean verifyBrackets(MultipartFile file) throws UnsupportedFileTypeException, IOException;
 }

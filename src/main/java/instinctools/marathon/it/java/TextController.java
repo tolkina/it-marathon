@@ -59,7 +59,7 @@ public class TextController {
     public ResponseEntity<?> verifyBrackets(@RequestParam("file") MultipartFile file) {
         LOGGER.info("Verify that the brackets are correctly positioned.");
         try {
-            Boolean verifyBrackets = textService.verifyBrackets(file);
+            boolean verifyBrackets = textService.verifyBrackets(file);
             return new ResponseEntity<>(new Response(null, verifyBrackets ? "correct" : "incorrect", null), HttpStatus.OK);
         } catch (UnsupportedFileTypeException e) {
             LOGGER.error(e.getMessage());

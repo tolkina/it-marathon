@@ -9,6 +9,7 @@ angular.module('javaApp').controller('TextCtrl',
             textService.checkBrackets($scope.file).then(
                 function (response) {
                     self.ans = response.message;
+                    self.words = undefined;
                 },
                 function (errResponse) {
                     self.error = errResponse.data.error;
@@ -20,6 +21,7 @@ angular.module('javaApp').controller('TextCtrl',
             textService.analyzeText($scope.file).then(
                 function (response) {
                     self.words = response.data;
+                    self.ans = undefined;
                 },
                 function (errResponse) {
                     self.error = errResponse.data.error;
